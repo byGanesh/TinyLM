@@ -19,13 +19,8 @@ ROPE_THETA = 10000.0
 DROPOUT = 0.0
 
 # Tokenizer
-SPECIAL_TOKENS = [
-    "[PAD]",
-    "[UNK]",
-    "[CLS]",
-    "[SEP]",
-    "[MASK]",
-]
+SPECIAL_TOKENS = ["[UNK]", "[PAD]", "[BOS]", "[EOS]"]
+
 
 # Weight tying
 TIE_EMB = True
