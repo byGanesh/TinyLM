@@ -34,7 +34,7 @@ def mk_optimizer(model):
         {"params": decay, "weight_decay": WEIGHT_DECAY},
         {"params": no_decay, "weight_decay": 0.0},
     ]
-    return AdamW(groups, lr=MAX_LR, beta=(0.9, 0.95), eps=1e-8)
+    return AdamW(groups, lr=MAX_LR, betas=(0.9, 0.95), eps=1e-8)
 
 # eval
 @torch.no_grad()
@@ -109,6 +109,8 @@ def train(
 
         # gradient clipping
         torch.nn.utils.clip_grad_norm_(model.parameters(), GRAD_CLIP)
+        optimizer.step()
+
         optimizer.zero_grad(set_to_none = True)
         running_loss += loss.item()
 
