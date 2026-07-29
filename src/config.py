@@ -18,6 +18,15 @@ ROPE_THETA = 10000.0
 # Regularization
 DROPOUT = 0.0
 
+# Tokenizer
+SPECIAL_TOKENS = [
+    "[PAD]",
+    "[UNK]",
+    "[CLS]",
+    "[SEP]",
+    "[MASK]",
+]
+
 # Weight tying
 TIE_EMB = True
 

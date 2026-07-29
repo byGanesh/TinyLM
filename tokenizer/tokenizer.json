@@ -1,0 +1,211 @@
+{
+  "version": "1.0",
+  "truncation": null,
+  "padding": null,
+  "added_tokens": [
+    {
+      "id": 0,
+      "content": "[PAD]",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": false,
+      "special": true
+    },
+    {
+      "id": 1,
+      "content": "[UNK]",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": false,
+      "special": true
+    },
+    {
+      "id": 2,
+      "content": "[CLS]",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": false,
+      "special": true
+    },
+    {
+      "id": 3,
+      "content": "[SEP]",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": false,
+      "special": true
+    },
+    {
+      "id": 4,
+      "content": "[MASK]",
+      "single_word": false,
+      "lstrip": false,
+      "rstrip": false,
+      "normalized": false,
+      "special": true
+    }
+  ],
+  "normalizer": null,
+  "pre_tokenizer": {
+    "type": "Whitespace"
+  },
+  "post_processor": null,
+  "decoder": null,
+  "model": {
+    "type": "BPE",
+    "dropout": null,
+    "unk_token": "[UNK]",
+    "continuing_subword_prefix": null,
+    "end_of_word_suffix": null,
+    "fuse_unk": false,
+    "byte_fallback": false,
+    "ignore_merges": false,
+    "vocab": {
+      "[PAD]": 0,
+      "[UNK]": 1,
+      "[CLS]": 2,
+      "[SEP]": 3,
+      "[MASK]": 4,
+      ",": 5,
+      ".": 6,
+      "H": 7,
+      "T": 8,
+      "a": 9,
+      "b": 10,
+      "c": 11,
+      "d": 12,
+      "e": 13,
+      "h": 14,
+      "i": 15,
+      "l": 16,
+      "m": 17,
+      "n": 18,
+      "o": 19,
+      "p": 20,
+      "r": 21,
+      "s": 22,
+      "t": 23,
+      "u": 24,
+      "v": 25,
+      "w": 26,
+      "x": 27,
+      "y": 28,
+      "is": 29,
+      "ve": 30,
+      "ha": 31,
+      "Th": 32,
+      "an": 33,
+      "ou": 34,
+      "re": 35,
+      "to": 36,
+      "you": 37,
+      "ce": 38,
+      "da": 39,
+      "he": 40,
+      "mo": 41,
+      "ra": 42,
+      "rl": 43,
+      "tha": 44,
+      "tra": 45,
+      "have": 46,
+      "This": 47,
+      "remo": 48,
+      "that": 49,
+      "remove": 50
+    },
+    "merges": [
+      [
+        "i",
+        "s"
+      ],
+      [
+        "v",
+        "e"
+      ],
+      [
+        "h",
+        "a"
+      ],
+      [
+        "T",
+        "h"
+      ],
+      [
+        "a",
+        "n"
+      ],
+      [
+        "o",
+        "u"
+      ],
+      [
+        "r",
+        "e"
+      ],
+      [
+        "t",
+        "o"
+      ],
+      [
+        "y",
+        "ou"
+      ],
+      [
+        "c",
+        "e"
+      ],
+      [
+        "d",
+        "a"
+      ],
+      [
+        "h",
+        "e"
+      ],
+      [
+        "m",
+        "o"
+      ],
+      [
+        "r",
+        "a"
+      ],
+      [
+        "r",
+        "l"
+      ],
+      [
+        "t",
+        "ha"
+      ],
+      [
+        "t",
+        "ra"
+      ],
+      [
+        "ha",
+        "ve"
+      ],
+      [
+        "Th",
+        "is"
+      ],
+      [
+        "re",
+        "mo"
+      ],
+      [
+        "tha",
+        "t"
+      ],
+      [
+        "remo",
+        "ve"
+      ]
+    ]
+  }
+}
