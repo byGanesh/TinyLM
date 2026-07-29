@@ -52,7 +52,7 @@ def evaluate(model, val_data, eval_steps=50):
 
 
 # checkpoint
-def save_checkpoint(model, optimizer, step, loss,path="checkpoints"):
+def save_checkpoint(model, optimizer, step, loss,path="checkpoints", keep_last=3):
     os.makedirs(path, exist_ok=True)
     torch.save({
         "step": step,
@@ -61,6 +61,14 @@ def save_checkpoint(model, optimizer, step, loss,path="checkpoints"):
         "loss": loss,
     }, f"{path}/ckpt_{step}.pt")
     print(f"saved checkpoint at step {step}")
+
+    ckpts = sorted([
+        f for f in os.listdir(path) if f.startswith("ckpt_")
+    ], key=lambda x: int(x.split("_")[1].split(".")[0]))
+
+    for ck in ckpts[:-keep_last]:
+        os.remove(f"{path}/{ck}")
+        print(f"deleted old checkpoint: {ck}")
 
 def load_checkpoint(model, optimizer, path):
     ckpt = torch.load(path, map_location=device)
@@ -117,7 +125,7 @@ def train(
         # loggin
         if step % log == 0 and step > 0:
             avg_loss = running_loss / log
-            print(f"step {step:6d} | loss{avg_loss:.4f} | ppl {math.exp(avg_loss):7.2f} | lr {lr:.2e}")
+            print(f"step {step:6d} | loss {avg_loss:.4f} | ppl {math.exp(avg_loss):7.2f} | lr {lr:.2e}")
             running_loss = 0.0
 
         # evaluation
@@ -131,4 +139,9 @@ def train(
 
     save_checkpoint(model, optimizer, total_steps, loss.item())
     print("training complete")
+    torch.save(
+        model.state_dict(),
+        "checkpoints/tinylm_final.pt"
+    )
+    print("saved final model weights...")
     return model

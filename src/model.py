@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from config import (FFN_DIM, HEAD_DIM, MAX_SEQ_LEN, N_HEADS, N_KV_HEADS, N_QUERIES_PER_KV, PAD_TOKEN_ID, ROPE_THETA, TIE_EMB, VOCAB_SIZE, D_MODEL, N_LAYERS)
+from src.config import (FFN_DIM, HEAD_DIM, MAX_SEQ_LEN, N_HEADS, PAD_TOKEN_ID, ROPE_THETA, TIE_EMB, VOCAB_SIZE, D_MODEL, N_LAYERS)
 import math
 
 class RMSNorm(nn.Module):
@@ -52,8 +52,8 @@ class Attention(nn.Module):
     def forward(self, x, freqs_cis):
         B, T, _ = x.shape
         Q = self.q_proj(x).view(B, T, N_HEADS, HEAD_DIM)
-        K = self.k_proj(x).view(B, T, N_KV_HEADS, HEAD_DIM)
-        V = self.v_proj(x).view(B,T, N_KV_HEADS, HEAD_DIM)
+        K = self.k_proj(x).view(B, T, N_HEADS, HEAD_DIM)
+        V = self.v_proj(x).view(B,T, N_HEADS, HEAD_DIM)
 
         Q, K = rotary_emb(Q, K, freqs_cis)
 

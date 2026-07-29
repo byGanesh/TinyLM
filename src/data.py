@@ -6,7 +6,7 @@ from tokenizers import Tokenizer
 from tokenizers.models import BPE
 from tokenizers.trainers import BpeTrainer
 from tokenizers.pre_tokenizers import Whitespace
-from config import SPECIAL_TOKENS, VOCAB_SIZE
+from src.config import SPECIAL_TOKENS, VOCAB_SIZE
 
 def clean_text(txt):
     txt = re.sub(r'https?://\S+|www\.\S+', '', txt)
