@@ -6,7 +6,7 @@ from tokenizers import Tokenizer
 from tokenizers.models import BPE
 from tokenizers.trainers import BpeTrainer
 from tokenizers.pre_tokenizers import Whitespace
-from src.config import SPECIAL_TOKENS, VOCAB_SIZE
+from src.config import MAX_SEQ_LEN, SPECIAL_TOKENS, VOCAB_SIZE
 
 def clean_text(txt):
     txt = re.sub(r'https?://\S+|www\.\S+', '', txt)
@@ -52,41 +52,67 @@ def save_bin(arr, path):
     print(f"Saved {len(arr):} tokens {path}")
 
 def build_dataset(
-    raw_path = "data/corpus.txt",
-    cleaned_path = "data/cleaned_corpus.txt",
+    raw_path   = "data/corpus.txt",
     train_path = "data/train.bin",
-    val_path = "data/val.bin",
-    val_split = 0.05
+    val_path   = "data/val.bin",
+    val_split  = 0.05,
 ):
-    print("Cleaning...")
-    with open(raw_path, "r", encoding="utf-8") as f:
-        raw = f.read()
+        print("building tokenizer corpus...")
+        tok_corpus = "data/tok_corpus.txt"
+        with open(raw_path, "r", encoding="utf-8") as f_in, \
+             open(tok_corpus, "w", encoding="utf-8") as f_out:
+            chars = 0
+            for line in f_in:
+                f_out.write(line)
+                chars += len(line)
+                if chars > 50_000_000:
+                    break
+        print(f"tokenizer corpus ready: {chars/1e6:.1f}MB")
 
-    cleaned = clean_text(raw)
-    with open(cleaned_path, "w", encoding="utf-8") as f:
-        f.write(cleaned)
+        print("training tokenizer...")
+        tokenizer = train_tokenizer(tok_corpus)
 
-    print("training tokenizer...")
-    tokenizer = train_tokenizer(cleaned_path)
+        print("tokenizing...")
+        temp_path = "data/all_tokens.bin"
+        total = 0
 
-    print("tokenizing...")
-    tokens = tokenize_data(cleaned_path, tokenizer)
-    print(f"Total tokens: {len(tokens):,}")
+        with open(raw_path, "r", encoding="utf-8") as f, \
+             open(temp_path, "ab") as out:
+            doc = []
+            for line in f:
+                line = line.strip()
+                if line == "":
+                    if doc:
+                        text = clean_text(" ".join(doc))
+                        ids  = tokenizer.encode(text).ids
+                        if len(ids) >= 10:
+                            np.array(ids, dtype=np.uint16).tofile(out)
+                            total += len(ids)
+                        doc = []
+                    if total % 500_000 == 0 and total > 0:
+                        print(f"  {total:,} tokens...", end="\r")
+                else:
+                    doc.append(line)
 
-    split = int(len(tokens) * (1 - val_split))
-    train_tokens = tokens[:split]
-    val_tokens = tokens[split:]
+        print(f"\ntotal tokens: {total:,}")
 
-    print("Saving...")
-    save_bin(train_tokens, train_path)
-    save_bin(val_tokens, val_path)
+        print("splitting and saving...")
+        all_tokens = np.memmap(temp_path, dtype=np.uint16, mode='r')
+        split = int(len(all_tokens) * (1 - val_split))
 
-    print(f"train: {len(train_tokens):,} tokens")
-    print(f"val: {len(val_tokens):,} tokens")
+        save_bin(np.array(all_tokens[:split]), train_path)
+        save_bin(np.array(all_tokens[split:]), val_path)
+
+        os.remove(temp_path)
+        print(f"\ndone.")
+        print(f"train: {split:,} tokens")
+        print(f"val:{total - split:,} tokens")
+        print(f"teps at batch=16, seq={MAX_SEQ_LEN}: {split // (16 * MAX_SEQ_LEN):,}")
+
 
 def load_bin(path):
     data = np.memmap(path, dtype=np.uint16, mode='r')
-    return torch.tensor(data, dtype=torch.long)
+    return torch.tensor(np.array(data), dtype=torch.long)
 
 if __name__ == "__main__":
     build_dataset()
