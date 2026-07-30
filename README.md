@@ -1,14 +1,26 @@
 # TinyLM
 
-A lightweight decoder-only transformer language model (~14M params) trained from scratch on Simple Wikipedia. Built with PyTorch — no HF Transformers, no flash attention, no dependencies beyond core PyTorch.
+TinyLM is my attempt at building a small language model from scratch. I want to see how far a ~14M parameter decoder can go using modern transformer architecture, more pretraining, instruction tuning, and eventually RLHF. 
 
-## Quick Start
+Everything here is written in PyTorch. I didn't use HuggingFace model code, or any pretrained weights.
 
-```bash
-pip install torch tokenizers numpy
-python scripts/download_data.py            # download Simple Wikipedia
-python main.py                             # train from scratch
-python src/inference.py                    # generate text
+Current status:  
+* ~14.3M parameters
+* decoder-only transformer
+* pretrained on ~63M tokens from Simple Wikipedia
+* continuing pretraining on larger datasets
+
+
+## Model
+
+```
+14,326,016 parameters
+
+12 layers
+256 hidden size
+4 attention heads
+16K BPE vocabulary
+1024 context length
 ```
 
 ## Architecture
@@ -30,8 +42,6 @@ Token Embedding (V=16K × d=256)
        ↓
      logits
 ```
-
-![TinyLM Architecture](assets/architecture.png)
 
 ### Key Design Choices
 
