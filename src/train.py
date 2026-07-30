@@ -52,14 +52,13 @@ def evaluate(model, val_data, eval_steps=50):
 
 
 # checkpoint
-def save_checkpoint(model, optimizer, step, loss, path="checkpoints", keep_last=3):
+def save_checkpoint(model, optimizer, step, loss,path="checkpoints", keep_last=3):
     os.makedirs(path, exist_ok=True)
-    m = model.module if hasattr(model, 'module') else model
     torch.save({
-        "step":      step,
-        "model":     m.state_dict(),
+        "step": step,
+        "model": model.state_dict(),
         "optimizer": optimizer.state_dict(),
-        "loss":      loss,
+        "loss": loss,
     }, f"{path}/ckpt_{step}.pt")
     print(f"saved checkpoint at step {step}")
 
@@ -71,12 +70,9 @@ def save_checkpoint(model, optimizer, step, loss, path="checkpoints", keep_last=
         os.remove(f"{path}/{ck}")
         print(f"deleted old checkpoint: {ck}")
 
-
 def load_checkpoint(model, optimizer, path):
     ckpt = torch.load(path, map_location=device)
-    m = model.module if hasattr(model, 'module') else model
-    m.load_state_dict(ckpt["model"])
-
+    model.load_state_dict(ckpt["model"])
     optimizer.load_state_dict(ckpt["optimizer"])
     print(f"resumed from step {ckpt['step']}, loss {ckpt['loss']:.4f}")
     return ckpt["step"]
@@ -92,11 +88,6 @@ def train(
     log = 50,
 ):
     model = TinyLM().to(device)
-
-    if torch.cuda.device_count() > 1:
-        print(f"using {torch.cuda.device_count()} GPUs")
-        model = torch.nn.DataParallel(model)
-
     optimizer = mk_optimizer(model)
 
     start_step = 0
@@ -148,9 +139,8 @@ def train(
 
     save_checkpoint(model, optimizer, total_steps, loss.item())
     print("training complete")
-    m = model.module if hasattr(model, 'module') else model
     torch.save(
-        m.model.state_dict(),
+        model.state_dict(),
         "checkpoints/tinylm_final.pt"
     )
     print("saved final model weights...")
