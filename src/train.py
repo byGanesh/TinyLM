@@ -91,7 +91,7 @@ def train(
 ):
     model = TinyLM().to(device)
 
-    if torch.cuda.device_count > 1:
+    if torch.cuda.device_count() > 1:
         print(f"using {torch.cuda.device_count()} GPUs")
         model = torch.nn.DataParallel(model)
 
