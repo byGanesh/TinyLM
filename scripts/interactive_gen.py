@@ -6,7 +6,7 @@ from src.config import MAX_SEQ_LEN
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 model = TinyLM().to(device)
-ckpt = torch.load("checkpoints/tinylm-v1-66M.pt", map_location=device)
+ckpt = torch.load("checkpoints/tinylm-v3-600M.pt", map_location=device)
 model.load_state_dict(ckpt)
 model.eval()
 print(f"model loaded on {device}")
