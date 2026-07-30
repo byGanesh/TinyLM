@@ -66,3 +66,10 @@ download_streaming(
     "data/corpus.txt",
     max_chars=300_000_000,
 )
+
+download_streaming(
+    "HuggingFaceFW/fineweb-edu",
+    "sample-10BT",
+    "data/corpus.txt",
+    max_chars=500_000_000,
+)
