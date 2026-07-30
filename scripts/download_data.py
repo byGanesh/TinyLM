@@ -14,7 +14,7 @@ def download_streaming(dataset_name, config, output_path, max_tokens=100_000_000
     with open(output_path, "a", encoding="utf-8") as f:
         for art in ds:
             txt = art["text"].strip()
-            if len(text) == 0:
+            if len(txt) == 0:
                 continue
             f.write(txt + "\n\n")
             char_count += len(txt)
