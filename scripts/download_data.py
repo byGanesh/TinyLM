@@ -50,6 +50,34 @@ def download_tinystories(output_path):
 
     print(f"done — {count} stories | {char_count/1e6:.0f}MB")
 
+
+# Fineweb
+def download_fineweb(output_path, max_chars=500_000_000):
+    print("streaming FineWeb-Edu...")
+    ds = load_dataset(
+        "HuggingFaceFW/fineweb-edu",
+        name      = "sample-10BT",
+        split     = "train",
+        streaming = True,
+    )
+    char_count = 0
+    count = 0
+    with open(output_path, "a", encoding="utf-8") as f:
+        for doc in ds:
+            text = doc["text"].strip()
+            if len(text) == 0:
+                continue
+            f.write(text + "\n\n")
+            char_count += len(text)
+            count += 1
+            if count % 10000 == 0:
+                print(f"  {count} docs | {char_count/1e6:.0f}MB", end="\r")
+            if char_count >= max_chars:
+                print(f"\n  stopped at {max_chars/1e6:.0f}MB limit")
+                break
+    print(f"done — {count} docs | {char_count/1e6:.0f}MB")
+
+
 download_streaming(
     "wikimedia/wikipedia",
     "20231101.simple",
@@ -67,9 +95,4 @@ download_streaming(
     max_chars=300_000_000,
 )
 
-download_streaming(
-    "HuggingFaceFW/fineweb-edu",
-    "sample-10BT",
-    "data/corpus.txt",
-    max_chars=500_000_000,
-)
+download_fineweb("data/corpus.txt", max_chars=500_000_000)
