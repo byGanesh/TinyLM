@@ -3,3 +3,4 @@ data/
 checkpoints/
 scripts/__pycache__/
 .env
+additional/

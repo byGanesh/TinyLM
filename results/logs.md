@@ -131,7 +131,7 @@ the remaining four members in the family .
 | **config** | same as v1 (D_MODEL=256, N_LAYERS=12, N_HEADS=4, FFN_DIM=768) |
 | **params** | 14,326,016 |
 | **dataset** | Wikipedia + TinyStories + FineWeb |
-| **tokens** | 600M+ (train) |
+| **tokens** | 622M+ (train) |
 | **optimizer** | AdamW, β=(0.9,0.95), λ=0.1 |
 | **schedule** | linear warmup 2000 steps → cosine decay |
 | **peak LR** | 3e-3 |
@@ -139,6 +139,15 @@ the remaining four members in the family .
 | **steps** | ~24,000 |
 | **dtype** | bfloat16 |
 | **Training time** | ~4 hour |
+
+**Loss:**
+
+| step | train loss | train ppl | val loss | val ppl |
+|-----:|----------:|----------:|--------:|--------:|
+| 22000 | — | — | 4.47 | 87.6 |
+| 22500 | 2.61 | 13.6 | — | — |
+| 23000 | 2.58 | 13.3 | 4.47 | 87.2 |
+| 24000 | ~2.62 | - | - | - |
 
 **Reports:**
 - coherent multi-sentence narratives with dialogue and story arcs

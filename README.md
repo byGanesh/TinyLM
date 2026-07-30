@@ -15,6 +15,7 @@ Current status:
 
 ```
 14,326,016 parameters
+622,210,000 tokens seen
 
 12 layers
 256 hidden size
@@ -49,7 +50,7 @@ Token Embedding (V=16K × d=256)
 |-----------|--------|
 | **Position Encoding** | Rotary Position Embeddings (RoPE), θ=10,000 |
 | **Normalization** | Pre-norm RMSNorm (no learnable bias) |
-| **Activation** | SwiGLU (gated SiLU) — 3 linear projections per FFN |
+| **Activation** | SwiGLU (gated SiLU) - 3 linear projections per FFN |
 | **Weight Tying** | Embedding ↔ LM head weights are shared |
 | **Init** | Normal(0, 0.02) with residual scaling `1/√(2N)` |
 
@@ -86,14 +87,24 @@ Token Embedding (V=16K × d=256)
 
 ## Usage
 
+### Download from Hugging Face
+
+```bash
+# Download v3 checkpoint (trained on 600M+ tokens)
+huggingface-cli download tinylm/tinylm-v3 checkpoints/tinylm-v3.pt --local-dir .
+# or via direct link
+wget https://huggingface.co/tinylm/tinylm-v3/resolve/main/checkpoints/tinylm-v3.pt -P checkpoints/
+```
+
 ### Inference
 
 ```python
 from src.model import TinyLM
 from tokenizers import Tokenizer
+import torch
 
 model = TinyLM()
-model.load_state_dict(torch.load("checkpoints/tinylm_final.pt"))
+model.load_state_dict(torch.load("checkpoints/tinylm-v3.pt", map_location="cpu"))
 model.eval()
 
 tokenizer = Tokenizer.from_file("tokenizer/tokenizer.json")
