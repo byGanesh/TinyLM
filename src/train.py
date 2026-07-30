@@ -74,7 +74,9 @@ def save_checkpoint(model, optimizer, step, loss, path="checkpoints", keep_last=
 
 def load_checkpoint(model, optimizer, path):
     ckpt = torch.load(path, map_location=device)
-    model.load_state_dict(ckpt["model"])
+    m = model.module if hasattr(model, 'module') else model
+    m.load_state_dict(ckpt["model"])
+
     optimizer.load_state_dict(ckpt["optimizer"])
     print(f"resumed from step {ckpt['step']}, loss {ckpt['loss']:.4f}")
     return ckpt["step"]
