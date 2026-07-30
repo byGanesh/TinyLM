@@ -20,8 +20,15 @@ def generate(prompt, max_new_tokens=100, temperature=0.8, top_k=40):
                          temperature=temperature, top_k=top_k)
     return tokenizer.decode(out[0].tolist())
 
-print(generate("The most important thing in life is"))
-print("---")
-print(generate("Language is"))
-print("---")
-print(generate("I do not know"))
+prompts = [
+    "Once upon a time",
+    "The most important thing in life is",
+    "I do not know",
+    "Language is",
+    "A person who always learns",
+]
+
+for p in prompts:
+    print(f">>> {p}")
+    print(generate(p))
+    print("---")
